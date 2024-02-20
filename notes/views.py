@@ -99,6 +99,14 @@ def share_note(request):
 
     for username in usernames:
         user = get_object_or_404(User, username=username)
+        if request.user == user:
+            return JsonResponse(
+                {"error" : "You can't share your note with yourself."}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if user in note.shared_with.all():
+            return JsonResponse({"error" : "Note is already shared with this user."}, 
+                status=status.HTTP_400_BAD_REQUEST)
         note.shared_with.add(user)
 
     return JsonResponse({"message": "Note shared successfully!"})
