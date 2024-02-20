@@ -12,7 +12,7 @@ AUTH_SAMPLE_DATA = {
 
 
 class LoginAPITest(APITestCase):
-    url = "/auth/login/"
+    url = "/login/"
 
     def setUp(self):
         user = User.objects.create_user(**AUTH_SAMPLE_DATA)
@@ -39,7 +39,7 @@ class LoginAPITest(APITestCase):
 
 
 class SignUpAPITest(APITestCase):
-    url = "/auth/signup/"
+    url = "/signup/"
 
     def test_user_signup_successful(self):
         data = {**AUTH_SAMPLE_DATA, "password2": "aB@#2022"}
