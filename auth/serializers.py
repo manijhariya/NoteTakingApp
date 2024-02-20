@@ -11,6 +11,7 @@ class SignupSerializer(serializers.ModelSerializer):
     """
     SignupSerializer class
     """
+
     email = serializers.EmailField(
         required=True, validators=[UniqueValidator(queryset=User.objects.all())]
     )
@@ -67,6 +68,7 @@ class LoginSerializer(TokenObtainPairSerializer):
     """
     LoginSerializer class
     """
+
     @classmethod
     def get_token(cls, user):
         token = super(LoginSerializer, cls).get_token(user)

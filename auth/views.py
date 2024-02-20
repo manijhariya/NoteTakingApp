@@ -11,6 +11,7 @@ class LoginView(TokenObtainPairView):
     """
     LoginView class
     """
+
     permission_classes = (AllowAny,)
     serializer_class = LoginSerializer
 
@@ -19,6 +20,7 @@ class SignupView(generics.CreateAPIView):
     """
     SignupView class
     """
+
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = SignupSerializer

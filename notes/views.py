@@ -60,7 +60,7 @@ def create_note(request):
 @login_required
 def get_or_update_note(request, note_id):
     """
-    Get or update a note 
+    Get or update a note
 
     Args:
         request (_type_): user request
@@ -132,14 +132,16 @@ def share_note(request):
         # check if user is sharing note with self
         if request.user == user:
             return JsonResponse(
-                {"error" : "You can't share your note with yourself."}, 
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": "You can't share your note with yourself."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         # check if user is sharing note with already shared user.
         if user in note.shared_with.all():
-            return JsonResponse({"error" : "Note is already shared with this user."}, 
-                status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(
+                {"error": "Note is already shared with this user."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         note.shared_with.add(user)
 
     return JsonResponse({"message": "Note shared successfully!"})

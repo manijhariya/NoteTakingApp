@@ -49,7 +49,6 @@ class NoteTestCase(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn("Invalid content", response.json()["error"])
 
-
     def test_get_note(self):
         self.client.force_login(self.user)
         response = self.client.get(reverse("get_or_update_note", args=[self.note.id]))
@@ -73,7 +72,6 @@ class NoteTestCase(TestCase):
         self.client.force_login(new_user)
         response = self.client.get(reverse("get_or_update_note", args=[self.note.id]))
         self.assertEqual(response.status_code, 403)
-
 
     def test_share_note(self):
         self.client.force_login(self.user)
@@ -101,7 +99,7 @@ class NoteTestCase(TestCase):
             {"note_id": self.note.id, "usernames": [self.user.username]},
         )
         self.assertEqual(response.status_code, 400)
-    
+
     def test_share_note_with_already_shared(self):
         self.client.force_login(self.user)
         ANOTHER_USER = {
@@ -177,7 +175,7 @@ class NoteTestCase(TestCase):
         response = self.client.get(reverse("get_note_history", args=[self.note.id]))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 1)
-    
+
     def test_get_note_history_no_update(self):
         self.client.force_login(self.user)
         response = self.client.get(reverse("get_note_history", args=[self.note.id]))
