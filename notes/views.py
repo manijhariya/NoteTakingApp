@@ -1,3 +1,4 @@
+# Notes Views
 import json
 
 from django.contrib.auth.decorators import login_required
@@ -14,6 +15,15 @@ from notes.models import Note, NoteUpdate
 @csrf_exempt  # To handle csrf errors
 @login_required
 def create_note(request):
+    """
+    Create a new id with title and its content
+
+    Args:
+        request : user request
+
+    Returns:
+        None
+    """
     if request.method == "POST":
         title = request.POST.get("title")
         content = request.POST.get("content")
@@ -49,6 +59,16 @@ def create_note(request):
 
 @login_required
 def get_or_update_note(request, note_id):
+    """
+    Get or update a note 
+
+    Args:
+        request (_type_): user request
+        note_id (int:pk): note id to get or update note.
+
+    Returns:
+        str: title, content
+    """
     if request.method == "GET":
         note = get_object_or_404(Note, id=note_id)
 
@@ -85,6 +105,15 @@ def get_or_update_note(request, note_id):
 @csrf_exempt
 @login_required
 def share_note(request):
+    """
+    Share a note to another existing user
+
+    Args:
+        request : user request
+
+    Returns:
+        JSON: status, message
+    """
     if request.method == "POST":
         note_id = request.POST.get("note_id")
         usernames = request.POST.getlist("usernames")
@@ -99,11 +128,15 @@ def share_note(request):
 
     for username in usernames:
         user = get_object_or_404(User, username=username)
+
+        # check if user is sharing note with self
         if request.user == user:
             return JsonResponse(
                 {"error" : "You can't share your note with yourself."}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+        # check if user is sharing note with already shared user.
         if user in note.shared_with.all():
             return JsonResponse({"error" : "Note is already shared with this user."}, 
                 status=status.HTTP_400_BAD_REQUEST)
@@ -114,6 +147,16 @@ def share_note(request):
 
 @login_required
 def get_note_history(request, note_id):
+    """
+    Get note history
+
+    Args:
+        request : user request
+        note_id (int:pk): note id to get fetch history for.
+
+    Returns:
+        JSON: list of history for note
+    """
     note = get_object_or_404(Note, id=note_id)
 
     # Check if the logged-in user has access to the note

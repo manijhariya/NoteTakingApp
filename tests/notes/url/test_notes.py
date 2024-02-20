@@ -183,3 +183,21 @@ class NoteTestCase(TestCase):
         response = self.client.get(reverse("get_note_history", args=[self.note.id]))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 0)
+
+    def test_get_note_history_forbidden(self):
+        ANOTHER_USER = {
+            "username": "ethanhunt",
+            "password": "aB@#2022",
+            "email": "xyz@abc.com",
+            "first_name": "Ethan",
+            "last_name": "Hunt",
+        }
+
+        new_user = User.objects.create_user(**ANOTHER_USER)
+        self.client.force_login(new_user)
+        response = self.client.put(
+            reverse("get_or_update_note", args=[self.note.id]),
+            {"content": "This is an updated note."},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 403)

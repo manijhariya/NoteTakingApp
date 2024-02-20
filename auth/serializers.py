@@ -1,3 +1,5 @@
+# Auth Serializers
+
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
@@ -6,6 +8,9 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class SignupSerializer(serializers.ModelSerializer):
+    """
+    SignupSerializer class
+    """
     email = serializers.EmailField(
         required=True, validators=[UniqueValidator(queryset=User.objects.all())]
     )
@@ -31,6 +36,9 @@ class SignupSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, attrs):
+        """
+        Validate is both password matches
+        """
         if attrs["password"] != attrs["password2"]:
             raise serializers.ValidationError(
                 {"password": "Password fields didn't match."}
@@ -39,6 +47,9 @@ class SignupSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        """
+        Create a new user.
+        """
         user = User.objects.create(
             username=validated_data["username"],
             email=validated_data["email"],
@@ -53,7 +64,9 @@ class SignupSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(TokenObtainPairSerializer):
-
+    """
+    LoginSerializer class
+    """
     @classmethod
     def get_token(cls, user):
         token = super(LoginSerializer, cls).get_token(user)
