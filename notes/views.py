@@ -164,7 +164,8 @@ def get_note_history(request, note_id):
     # Check if the logged-in user has access to the note
     if request.user != note.owner and request.user not in note.shared_with.all():
         return JsonResponse(
-            {"error": "You do not have permission to view this note"}, status=403
+            {"error": "You do not have permission to view this note"},
+            status=status.HTTP_403_FORBIDDEN,
         )
 
     updates = note.updates.order_by("-timestamp").values("content", "timestamp")
